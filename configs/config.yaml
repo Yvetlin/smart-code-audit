@@ -1,0 +1,12 @@
+project:
+  target: ./examples/vulnerable
+
+llm:
+  provider: openai_compat
+  api_key_env: LLM_API_KEY
+  base_url_env: LLM_BASE_URL
+  model: Qwen/Qwen3-Omni-30B-A3B-Instruct
+
+policy:
+  min_severity: MEDIUM
+  min_probability: 0.0

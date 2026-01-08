@@ -1,0 +1,74 @@
+[
+  {
+    "Finding": {
+      "Tool": "gosec",
+      "RuleID": "G402",
+      "Severity": "HIGH",
+      "Message": "TLS InsecureSkipVerify set true.",
+      "File": "/Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go",
+      "Line": 25,
+      "Snippet": "24: \t_ = \u0026tls.Config{\n25: \t\tInsecureSkipVerify: true,\n26: \t}\n"
+    },
+    "Review": {
+      "IsRealIssue": true,
+      "Probability": 0.8,
+      "Impact": "Potential security vulnerability detected by static analysis",
+      "Fix": "Review the code and apply secure coding practices",
+      "Explanation": "Fallback: LLM response could not be parsed or returned an error"
+    }
+  },
+  {
+    "Finding": {
+      "Tool": "gosec",
+      "RuleID": "G401",
+      "Severity": "MEDIUM",
+      "Message": "Use of weak cryptographic primitive",
+      "File": "/Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go",
+      "Line": 18,
+      "Snippet": "17: func WeakCrypto() {\n18: \tsum := md5.Sum([]byte(\"password\"))\n19: \tfmt.Printf(\"%x\\n\", sum)\n"
+    },
+    "Review": {
+      "IsRealIssue": true,
+      "Probability": 0.8,
+      "Impact": "Potential security vulnerability detected by static analysis",
+      "Fix": "Review the code and apply secure coding practices",
+      "Explanation": "Fallback: LLM response could not be parsed or returned an error"
+    }
+  },
+  {
+    "Finding": {
+      "Tool": "gosec",
+      "RuleID": "G202",
+      "Severity": "MEDIUM",
+      "Message": "SQL string concatenation",
+      "File": "/Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go",
+      "Line": 12,
+      "Snippet": "11: func SQLInjection(db *sql.DB, user string) {\n12: \tquery := \"SELECT * FROM users WHERE name = '\" + user + \"'\"\n13: \t_, _ = db.Query(query)\n"
+    },
+    "Review": {
+      "IsRealIssue": true,
+      "Probability": 0.8,
+      "Impact": "Potential security vulnerability detected by static analysis",
+      "Fix": "Review the code and apply secure coding practices",
+      "Explanation": "Fallback: LLM response could not be parsed or returned an error"
+    }
+  },
+  {
+    "Finding": {
+      "Tool": "gosec",
+      "RuleID": "G501",
+      "Severity": "MEDIUM",
+      "Message": "Blocklisted import crypto/md5: weak cryptographic primitive",
+      "File": "/Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go",
+      "Line": 4,
+      "Snippet": "3: import (\n4: \t\"crypto/md5\"\n5: \t\"crypto/tls\"\n"
+    },
+    "Review": {
+      "IsRealIssue": true,
+      "Probability": 0.8,
+      "Impact": "Potential security vulnerability detected by static analysis",
+      "Fix": "Review the code and apply secure coding practices",
+      "Explanation": "Fallback: LLM response could not be parsed or returned an error"
+    }
+  }
+]
