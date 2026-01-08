@@ -56,12 +56,12 @@ func main() {
 
 	// ===== POLICY =====
 	log.Println("Evaluating security policy...")
-	critical := policy.HasCritical(enriched)
+	critical := policy.Evaluate(enriched)
 
 	// ===== REPORTS =====
 	log.Println("Generating reports...")
-	_ = markdown.Generate("results.md", enriched)
-	_ = sarif.Generate("results.sarif", enriched)
+	_ = markdown.Write("results.md", enriched)
+	_ = sarif.Write("results.sarif", enriched)
 
 	log.Printf("Audit finished in %s", time.Since(start))
 

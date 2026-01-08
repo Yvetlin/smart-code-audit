@@ -3,10 +3,11 @@ package markdown
 import (
 	"fmt"
 	"os"
+
 	"smart-code-audit/internal/models"
 )
 
-func Write(findings []models.EnrichedFinding, path string) error {
+func Write(path string, findings []models.EnrichedFinding) error {
 	var out string
 	for _, f := range findings {
 		out += fmt.Sprintf(
