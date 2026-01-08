@@ -1,0 +1,33 @@
+name: Smart Code Audit CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  sca:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install gosec
+        run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run Smart Code Audit
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+        run: |
+          go run ./cmd/sca
