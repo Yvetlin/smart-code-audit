@@ -17,57 +17,55 @@ import (
 )
 
 func main() {
-	startTime := time.Now()
-
-	log.SetOutput(os.Stdout)
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	start := time.Now()
 
 	log.Println("=== Smart Code Audit started ===")
 
-	cfgPath := flag.String("config", "configs/config.yaml", "path to config")
+	// ===== FLAGS =====
+	configPath := flag.String("config", "configs/config.yaml", "path to config")
+	targetPath := flag.String("target", ".", "path to target project")
 	flag.Parse()
 
+	// ===== CONFIG =====
 	log.Println("Loading configuration...")
-	cfg, err := config.Load(*cfgPath)
+	cfg, err := config.Load(*configPath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
+	// ===== STATIC ANALYSIS =====
 	log.Println("Running static analyzers...")
-	rawFindings := analyzers.RunAll(cfg)
-	log.Printf("Static analyzers finished, raw findings: %d\n", len(rawFindings))
+	raw := analyzers.RunAll(*targetPath)
+	log.Printf("Static analyzers finished, raw findings: %d", len(raw))
 
+	// ===== NORMALIZATION =====
 	log.Println("Normalizing findings...")
-	findings := normalizer.Normalize(rawFindings)
-	log.Printf("Normalized findings: %d\n", len(findings))
+	findings := normalizer.Normalize(raw)
+	log.Printf("Normalized findings: %d", len(findings))
 
+	// ===== LLM =====
 	log.Println("Initializing LLM client...")
 	llmClient, err := llm.New(cfg.LLM)
 	if err != nil {
 		log.Fatalf("Failed to init LLM client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	log.Println("Running AI-based analysis...")
-	enriched := llmClient.EnrichFindings(ctx, findings)
-	log.Printf("AI analysis completed, enriched findings: %d\n", len(enriched))
+	enriched := llmClient.EnrichFindings(context.Background(), findings)
+	log.Printf("AI analysis completed, enriched findings: %d", len(enriched))
 
+	// ===== POLICY =====
 	log.Println("Evaluating security policy...")
-	decision := policy.Evaluate(cfg.Policy, enriched)
+	critical := policy.HasCritical(enriched)
 
+	// ===== REPORTS =====
 	log.Println("Generating reports...")
-	if err := sarif.Write(enriched, "results.sarif"); err != nil {
-		log.Fatalf("Failed to write SARIF report: %v", err)
-	}
-	if err := markdown.Write(enriched, "results.md"); err != nil {
-		log.Fatalf("Failed to write Markdown report: %v", err)
-	}
+	_ = markdown.Generate("results.md", enriched)
+	_ = sarif.Generate("results.sarif", enriched)
 
-	duration := time.Since(startTime)
-	log.Printf("Audit finished in %s\n", duration)
+	log.Printf("Audit finished in %s", time.Since(start))
 
-	if decision.FailPipeline {
+	if critical {
 		log.Println("=== Audit завершен: ОБНАРУЖЕНЫ КРИТИЧЕСКИЕ ПРОБЛЕМЫ ===")
 		os.Exit(1)
 	}

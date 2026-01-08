@@ -14,16 +14,12 @@ type gosecReport struct {
 		Severity string `json:"severity"`
 		Details  string `json:"details"`
 		File     string `json:"file"`
-		Line     string `json:"line"` // ВАЖНО: string
+		Line     string `json:"line"`
 		Code     string `json:"code"`
 	} `json:"Issues"`
 }
 
 func runGosec(target string) []RawFinding {
-	if target == "" {
-		target = "./..."
-	}
-
 	cmd := exec.Command("gosec", "-fmt=json", target)
 	out, err := cmd.CombinedOutput()
 
@@ -39,11 +35,9 @@ func runGosec(target string) []RawFinding {
 		return nil
 	}
 
-	jsonPart := output[jsonStart:]
-
 	var report gosecReport
-	if err := json.Unmarshal([]byte(jsonPart), &report); err != nil {
-		log.Printf("failed to parse gosec JSON: %v\n", err)
+	if err := json.Unmarshal([]byte(output[jsonStart:]), &report); err != nil {
+		log.Printf("failed to parse gosec JSON: %v", err)
 		return nil
 	}
 
