@@ -1,0 +1,4 @@
+- /Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go:25 Potential security vulnerability detected by static analysis (0.80)
+- /Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go:18 Potential security vulnerability detected by static analysis (0.80)
+- /Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go:12 Potential security vulnerability detected by static analysis (0.80)
+- /Users/keisekere./Documents/Diploma/examples/vulnerable/vulnerable.go:4 Potential security vulnerability detected by static analysis (0.80)

@@ -1,0 +1,9 @@
+llm:
+  provider: openai_compat
+  api_key_env: LLM_API_KEY
+  base_url_env: LLM_BASE_URL
+  model: gpt-4.1-mini
+
+policy:
+  min_severity: HIGH
+  min_probability: 0.7
